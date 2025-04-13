@@ -1,6 +1,6 @@
 
 import { Card, CardContent } from "@/components/ui/card";
-import { MapPin, GraduationCap, Buildings, DollarSign } from 'lucide-react';
+import { MapPin, GraduationCap, Building2, DollarSign } from 'lucide-react';
 
 interface DestinationProps {
   country: string;
@@ -70,7 +70,7 @@ const DestinationCard = ({ country, image, description, universities, cost, requ
             <span>{cost}</span>
           </div>
           <div className="flex items-center gap-2">
-            <Buildings size={16} className="text-gw-blue" />
+            <Building2 size={16} className="text-gw-blue" />
             <span>{requirements}</span>
           </div>
         </div>
