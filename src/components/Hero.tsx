@@ -3,10 +3,12 @@ import { Button } from '@/components/ui/button';
 import { useEffect, useState, useRef } from 'react';
 import { ArrowRight, GraduationCap, MapPin, Award, Users, Sparkles, Globe, BookOpen } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 const Hero = () => {
   const [count, setCount] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
+  const isMobile = useIsMobile();
   
   // Update counter for infinite animation
   useEffect(() => {
@@ -19,7 +21,7 @@ const Hero = () => {
   return (
     <div 
       ref={containerRef}
-      className="relative bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white overflow-hidden h-screen flex items-center"
+      className="relative bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white overflow-hidden h-[100vh] flex items-center"
     >
       {/* Animated background elements - now with automatic animation */}
       <div className="absolute inset-0 overflow-hidden">
@@ -41,13 +43,13 @@ const Hero = () => {
         />
         
         {/* Floating orbs - maintained but with adjusted animation */}
-        {Array.from({ length: 15 }).map((_, i) => (
+        {Array.from({ length: isMobile ? 6 : 15 }).map((_, i) => (
           <motion.div 
             key={i}
             className="absolute rounded-full bg-gradient-to-r from-purple-500/30 to-blue-500/30 blur-xl"
             initial={{ 
-              width: Math.random() * 200 + 50,
-              height: Math.random() * 200 + 50,
+              width: Math.random() * (isMobile ? 100 : 200) + (isMobile ? 30 : 50),
+              height: Math.random() * (isMobile ? 100 : 200) + (isMobile ? 30 : 50),
               x: Math.random() * window.innerWidth,
               y: Math.random() * window.innerHeight,
               opacity: 0.1 + Math.random() * 0.3
@@ -77,8 +79,8 @@ const Hero = () => {
       </div>
       
       {/* Main content */}
-      <div className="container mx-auto relative z-10 px-6 py-12">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <div className="container mx-auto relative z-10 px-4 sm:px-6 py-8 sm:py-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
           <motion.div
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
@@ -89,14 +91,14 @@ const Hero = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.5, duration: 0.8 }}
-              className="inline-flex items-center space-x-2 px-4 py-2 mb-6 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-sm font-medium"
+              className="inline-flex items-center space-x-2 px-3 py-1.5 sm:px-4 sm:py-2 mb-4 sm:mb-6 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-xs sm:text-sm font-medium"
             >
-              <Sparkles className="w-4 h-4 text-purple-300" />
+              <Sparkles className="w-3 h-3 sm:w-4 sm:h-4 text-purple-300" />
               <span>Transforming Global Education</span>
             </motion.div>
             
             <motion.h1
-              className="text-5xl md:text-7xl font-bold leading-tight mb-6"
+              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-4 sm:mb-6"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.8, duration: 0.8 }}
@@ -108,7 +110,7 @@ const Hero = () => {
             </motion.h1>
             
             <motion.p
-              className="text-xl text-gray-300 mb-8 max-w-xl"
+              className="text-base sm:text-lg lg:text-xl text-gray-300 mb-6 sm:mb-8 max-w-xl"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 1, duration: 0.8 }}
@@ -117,21 +119,21 @@ const Hero = () => {
             </motion.p>
             
             <motion.div
-              className="flex flex-col sm:flex-row gap-4"
+              className="flex flex-col sm:flex-row gap-3 sm:gap-4"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 1.2, duration: 0.8 }}
             >
               <Button 
-                className="group bg-gradient-to-r from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600 text-white px-8 py-6 rounded-full transition-all duration-300 transform hover:scale-105"
+                className="group bg-gradient-to-r from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600 text-white px-4 sm:px-6 py-2 sm:py-3 md:px-8 md:py-6 rounded-full transition-all duration-300 transform hover:scale-105 text-sm sm:text-base"
                 onClick={() => document.getElementById('destinations')?.scrollIntoView({ behavior: 'smooth' })}
               >
                 <span>Explore Destinations</span>
-                <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" size={18} />
+                <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" size={isMobile ? 16 : 18} />
               </Button>
               <Button 
                 variant="outline" 
-                className="bg-transparent border border-purple-500/30 backdrop-blur-md text-white hover:bg-white/10 px-8 py-6 rounded-full transition-all duration-300"
+                className="bg-transparent border border-purple-500/30 backdrop-blur-md text-white hover:bg-white/10 px-4 sm:px-6 py-2 sm:py-3 md:px-8 md:py-6 rounded-full transition-all duration-300 text-sm sm:text-base"
                 onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
               >
                 <span>Book Consultation</span>
@@ -143,12 +145,12 @@ const Hero = () => {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.8, duration: 0.8 }}
-            className="relative"
+            className="relative hidden sm:block"
           >
             <div className="relative">
               {/* 3D Rotating Globe - kept with automatic animation */}
               <motion.div 
-                className="absolute -top-20 -right-20 w-64 h-64 opacity-40"
+                className="absolute -top-10 sm:-top-16 lg:-top-20 -right-10 sm:-right-16 lg:-right-20 w-32 sm:w-48 lg:w-64 h-32 sm:h-48 lg:h-64 opacity-40"
                 animate={{ 
                   rotate: 360
                 }}
@@ -167,12 +169,12 @@ const Hero = () => {
                 <img 
                   src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80" 
                   alt="Students studying abroad" 
-                  className="w-full object-cover h-[400px]"
+                  className="w-full object-cover h-[280px] sm:h-[320px] md:h-[360px] lg:h-[400px]"
                 />
                 
                 {/* Floating card */}
                 <motion.div 
-                  className="absolute bottom-6 left-6 right-6 bg-white/10 backdrop-blur-xl rounded-xl p-4 border border-white/20 z-20"
+                  className="absolute bottom-4 sm:bottom-6 left-4 sm:left-6 right-4 sm:right-6 bg-white/10 backdrop-blur-xl rounded-xl p-3 sm:p-4 border border-white/20 z-20"
                   initial={{ y: 20, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ delay: 1.5, duration: 0.6 }}
@@ -185,7 +187,7 @@ const Hero = () => {
                   >
                     <div>
                       <div className="text-xs uppercase tracking-wider text-purple-300">Your Journey Begins</div>
-                      <div className="text-sm font-medium">Global Education Pathways</div>
+                      <div className="text-xs sm:text-sm font-medium">Global Education Pathways</div>
                     </div>
                     <motion.div 
                       className="flex space-x-1"
@@ -196,7 +198,7 @@ const Hero = () => {
                         repeatType: "loop"
                       }}
                     >
-                      <BookOpen className="w-5 h-5 text-purple-300" />
+                      <BookOpen className="w-4 h-4 sm:w-5 sm:h-5 text-purple-300" />
                     </motion.div>
                   </motion.div>
                 </motion.div>
@@ -207,33 +209,33 @@ const Hero = () => {
         
         {/* Stats Section */}
         <motion.div 
-          className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-12 pt-8 border-t border-white/10"
+          className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 md:gap-6 mt-8 sm:mt-10 md:mt-12 pt-6 sm:pt-8 border-t border-white/10"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.6, duration: 0.8 }}
         >
           <StatCounter 
-            icon={<GraduationCap className="w-10 h-10 mb-3 text-purple-400" />} 
+            icon={<GraduationCap className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 mb-2 sm:mb-3 text-purple-400" />} 
             end={1000} 
             suffix="+" 
             label="Students Placed" 
             delay={0} 
           />
           <StatCounter 
-            icon={<MapPin className="w-10 h-10 mb-3 text-purple-400" />} 
+            icon={<MapPin className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 mb-2 sm:mb-3 text-purple-400" />} 
             end={4} 
             label="Countries" 
             delay={200} 
           />
           <StatCounter 
-            icon={<Award className="w-10 h-10 mb-3 text-purple-400" />} 
+            icon={<Award className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 mb-2 sm:mb-3 text-purple-400" />} 
             end={200} 
             suffix="+" 
             label="Universities" 
             delay={400} 
           />
           <StatCounter 
-            icon={<Users className="w-10 h-10 mb-3 text-purple-400" />} 
+            icon={<Users className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 mb-2 sm:mb-3 text-purple-400" />} 
             end={15} 
             suffix="+" 
             label="Years Experience" 
@@ -256,6 +258,7 @@ interface StatCounterProps {
 const StatCounter = ({ icon, end, suffix = "", label, delay = 0 }: StatCounterProps) => {
   const [count, setCount] = useState(0);
   const countRef = useRef<HTMLSpanElement>(null);
+  const isMobile = useIsMobile();
   
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -319,10 +322,10 @@ const StatCounter = ({ icon, end, suffix = "", label, delay = 0 }: StatCounterPr
       >
         {icon}
       </motion.div>
-      <span ref={countRef} className="text-3xl font-bold mb-1 flex items-center">
+      <span ref={countRef} className="text-xl sm:text-2xl md:text-3xl font-bold mb-1 flex items-center">
         <span>{count}</span><span>{suffix}</span>
       </span>
-      <span className="text-sm text-purple-200">{label}</span>
+      <span className="text-xs sm:text-sm text-purple-200">{label}</span>
     </motion.div>
   );
 };
