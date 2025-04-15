@@ -6,25 +6,9 @@ import { motion } from 'framer-motion';
 
 const Hero = () => {
   const [count, setCount] = useState(0);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const containerRef = useRef<HTMLDivElement>(null);
   
-  // Update mouse position for parallax effect
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      if (containerRef.current) {
-        const { left, top, width, height } = containerRef.current.getBoundingClientRect();
-        const x = (e.clientX - left) / width - 0.5;
-        const y = (e.clientY - top) / height - 0.5;
-        setMousePosition({ x, y });
-      }
-    };
-    
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
-  
-  // Increment counter for infinite animation
+  // Update counter for infinite animation
   useEffect(() => {
     const timer = setInterval(() => {
       setCount(prev => (prev + 1) % 1000);
@@ -35,19 +19,28 @@ const Hero = () => {
   return (
     <div 
       ref={containerRef}
-      className="relative bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white overflow-hidden min-h-[90vh] flex items-center"
+      className="relative bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white overflow-hidden h-screen flex items-center"
     >
-      {/* Animated background elements */}
+      {/* Animated background elements - now with automatic animation */}
       <div className="absolute inset-0 overflow-hidden">
-        {/* Animated grid */}
-        <div className="absolute inset-0" style={{ 
-          backgroundImage: 'linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px)',
-          backgroundSize: '40px 40px',
-          backgroundPosition: `${mousePosition.x * 20}px ${mousePosition.y * 20}px`,
-          transition: 'background-position 0.2s ease-out'
-        }}></div>
+        {/* Animated grid with automatic motion */}
+        <motion.div 
+          className="absolute inset-0" 
+          animate={{
+            backgroundPosition: ['0px 0px', '40px 40px'],
+          }}
+          transition={{
+            duration: 10,
+            repeat: Infinity,
+            ease: "linear"
+          }}
+          style={{ 
+            backgroundImage: 'linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px)',
+            backgroundSize: '40px 40px',
+          }}
+        />
         
-        {/* Floating orbs */}
+        {/* Floating orbs - maintained but with adjusted animation */}
         {Array.from({ length: 15 }).map((_, i) => (
           <motion.div 
             key={i}
@@ -84,7 +77,7 @@ const Hero = () => {
       </div>
       
       {/* Main content */}
-      <div className="container mx-auto relative z-10 px-6 py-24">
+      <div className="container mx-auto relative z-10 px-6 py-12">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <motion.div
             initial={{ opacity: 0, y: 50 }}
@@ -151,13 +144,9 @@ const Hero = () => {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.8, duration: 0.8 }}
             className="relative"
-            style={{
-              transform: `translate(${mousePosition.x * -20}px, ${mousePosition.y * -20}px)`,
-              transition: 'transform 0.2s ease-out'
-            }}
           >
             <div className="relative">
-              {/* 3D Rotating Globe */}
+              {/* 3D Rotating Globe - kept with automatic animation */}
               <motion.div 
                 className="absolute -top-20 -right-20 w-64 h-64 opacity-40"
                 animate={{ 
@@ -181,7 +170,7 @@ const Hero = () => {
                   className="w-full object-cover h-[400px]"
                 />
                 
-                {/* Floating cards */}
+                {/* Floating card */}
                 <motion.div 
                   className="absolute bottom-6 left-6 right-6 bg-white/10 backdrop-blur-xl rounded-xl p-4 border border-white/20 z-20"
                   initial={{ y: 20, opacity: 0 }}
@@ -212,63 +201,13 @@ const Hero = () => {
                   </motion.div>
                 </motion.div>
               </div>
-              
-              {/* Floating badges */}
-              <motion.div 
-                className="absolute -left-12 top-1/3 bg-white/10 backdrop-blur-xl rounded-full py-2 px-4 border border-white/20 flex items-center space-x-2"
-                initial={{ x: -50, opacity: 0 }}
-                animate={{ 
-                  x: 0, 
-                  opacity: 1,
-                  y: [0, -10, 0]
-                }}
-                transition={{ 
-                  delay: 1.2, 
-                  duration: 0.6,
-                  y: {
-                    duration: 4,
-                    repeat: Infinity,
-                    repeatType: "loop"
-                  }
-                }}
-              >
-                <div className="bg-purple-500 rounded-full p-1">
-                  <Award className="w-4 h-4" />
-                </div>
-                <span className="text-sm font-medium">Top Universities</span>
-              </motion.div>
-              
-              <motion.div 
-                className="absolute -right-8 top-1/4 bg-white/10 backdrop-blur-xl rounded-full py-2 px-4 border border-white/20 flex items-center space-x-2"
-                initial={{ x: 50, opacity: 0 }}
-                animate={{ 
-                  x: 0, 
-                  opacity: 1,
-                  y: [0, -12, 0]
-                }}
-                transition={{ 
-                  delay: 1.4, 
-                  duration: 0.6,
-                  y: {
-                    duration: 5,
-                    repeat: Infinity,
-                    repeatType: "loop",
-                    delay: 0.5
-                  }
-                }}
-              >
-                <div className="bg-blue-500 rounded-full p-1">
-                  <GraduationCap className="w-4 h-4" />
-                </div>
-                <span className="text-sm font-medium">Scholarships</span>
-              </motion.div>
             </div>
           </motion.div>
         </div>
         
         {/* Stats Section */}
         <motion.div 
-          className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-16 md:mt-20 pt-8 border-t border-white/10"
+          className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-12 pt-8 border-t border-white/10"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.6, duration: 0.8 }}
