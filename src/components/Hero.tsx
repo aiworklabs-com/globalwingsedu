@@ -1,127 +1,306 @@
 
 import { Button } from '@/components/ui/button';
-import { GraduationCap, MapPin, Award, Users } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
+import { ArrowRight, GraduationCap, MapPin, Award, Users, Sparkles, Globe, BookOpen } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 const Hero = () => {
-  const [isVisible, setIsVisible] = useState(false);
-
+  const [count, setCount] = useState(0);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const containerRef = useRef<HTMLDivElement>(null);
+  
+  // Update mouse position for parallax effect
   useEffect(() => {
-    // Set visible after a small delay for animation to trigger
-    const timer = setTimeout(() => {
-      setIsVisible(true);
-    }, 100);
+    const handleMouseMove = (e: MouseEvent) => {
+      if (containerRef.current) {
+        const { left, top, width, height } = containerRef.current.getBoundingClientRect();
+        const x = (e.clientX - left) / width - 0.5;
+        const y = (e.clientY - top) / height - 0.5;
+        setMousePosition({ x, y });
+      }
+    };
     
-    return () => clearTimeout(timer);
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
-
+  
+  // Increment counter for infinite animation
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCount(prev => (prev + 1) % 1000);
+    }, 3000);
+    return () => clearInterval(timer);
+  }, []);
+  
   return (
-    <div className="relative bg-gradient-to-br from-gw-blue via-gw-blue-dark to-black text-white overflow-hidden">
+    <div 
+      ref={containerRef}
+      className="relative bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white overflow-hidden min-h-[90vh] flex items-center"
+    >
       {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-0 left-0 w-full h-full">
-          {/* Animated circles */}
-          {Array.from({ length: 6 }).map((_, i) => (
-            <div 
-              key={i}
-              className={`absolute rounded-full bg-gw-gold/10 animate-pulse`}
-              style={{
-                width: `${Math.random() * 300 + 100}px`,
-                height: `${Math.random() * 300 + 100}px`,
-                top: `${Math.random() * 100}%`,
-                left: `${Math.random() * 100}%`,
-                animationDelay: `${i * 0.5}s`,
-                animationDuration: `${Math.random() * 5 + 5}s`
-              }}
-            />
-          ))}
-        </div>
+        {/* Animated grid */}
+        <div className="absolute inset-0" style={{ 
+          backgroundImage: 'linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px)',
+          backgroundSize: '40px 40px',
+          backgroundPosition: `${mousePosition.x * 20}px ${mousePosition.y * 20}px`,
+          transition: 'background-position 0.2s ease-out'
+        }}></div>
         
-        {/* Grid pattern overlay */}
-        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICAgIDxnIGZpbGw9Im5vbmUiIGZpbGwtcnVsZT0iZXZlbm9kZCI+CiAgICAgICAgPGcgZmlsbD0iI2ZmZiIgZmlsbC1vcGFjaXR5PSIwLjAyIj4KICAgICAgICAgICAgPHBhdGggZD0iTTM2IDM0djZoNnYtNmgtNnptMCAwdjZoNnYtNmgtNnoiLz4KICAgICAgICA8L2c+CiAgICA8L2c+Cjwvc3ZnPg==')] opacity-20"></div>
+        {/* Floating orbs */}
+        {Array.from({ length: 15 }).map((_, i) => (
+          <motion.div 
+            key={i}
+            className="absolute rounded-full bg-gradient-to-r from-purple-500/30 to-blue-500/30 blur-xl"
+            initial={{ 
+              width: Math.random() * 200 + 50,
+              height: Math.random() * 200 + 50,
+              x: Math.random() * window.innerWidth,
+              y: Math.random() * window.innerHeight,
+              opacity: 0.1 + Math.random() * 0.3
+            }}
+            animate={{
+              x: [
+                Math.random() * window.innerWidth,
+                Math.random() * window.innerWidth,
+                Math.random() * window.innerWidth
+              ],
+              y: [
+                Math.random() * window.innerHeight,
+                Math.random() * window.innerHeight,
+                Math.random() * window.innerHeight
+              ],
+              opacity: [0.1 + Math.random() * 0.3, 0.2 + Math.random() * 0.4, 0.1 + Math.random() * 0.3]
+            }}
+            transition={{
+              duration: 20 + Math.random() * 20,
+              repeat: Infinity,
+              repeatType: "reverse",
+              ease: "easeInOut",
+              delay: i * 0.5
+            }}
+          />
+        ))}
       </div>
       
-      <div className="container-custom relative">
-        <div className="flex flex-col lg:flex-row items-center py-20 md:py-28">
-          <div 
-            className={`lg:w-1/2 mb-10 lg:mb-0 z-10 transform transition-all duration-1000 ${
-              isVisible ? 'translate-x-0 opacity-100' : '-translate-x-10 opacity-0'
-            }`}
+      {/* Main content */}
+      <div className="container mx-auto relative z-10 px-6 py-24">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="flex flex-col"
           >
-            <h1 className="heading-xl mb-6 font-bold">
-              Your Gateway to<br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-gw-gold to-gw-gold-light animate-pulse">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.5, duration: 0.8 }}
+              className="inline-flex items-center space-x-2 px-4 py-2 mb-6 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-sm font-medium"
+            >
+              <Sparkles className="w-4 h-4 text-purple-300" />
+              <span>Transforming Global Education</span>
+            </motion.div>
+            
+            <motion.h1
+              className="text-5xl md:text-7xl font-bold leading-tight mb-6"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.8, duration: 0.8 }}
+            >
+              Your Gateway to
+              <span className="block mt-2 bg-clip-text text-transparent bg-gradient-to-r from-pink-500 via-purple-400 to-indigo-500 animate-gradient-x">
                 Global Education
               </span>
-            </h1>
-            <p className="text-lg md:text-xl mb-8 max-w-2xl text-white/90">
-              Expert guidance for your international education journey to the USA, Australia, UK, and Canada. Turn your study abroad dreams into reality with Global Wings Education.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4">
+            </motion.h1>
+            
+            <motion.p
+              className="text-xl text-gray-300 mb-8 max-w-xl"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 1, duration: 0.8 }}
+            >
+              Expert guidance for your international education journey through immersive learning experiences across the globe.
+            </motion.p>
+            
+            <motion.div
+              className="flex flex-col sm:flex-row gap-4"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 1.2, duration: 0.8 }}
+            >
               <Button 
-                className="btn-secondary group transition-all duration-300 transform hover:scale-105"
+                className="group bg-gradient-to-r from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600 text-white px-8 py-6 rounded-full transition-all duration-300 transform hover:scale-105"
                 onClick={() => document.getElementById('destinations')?.scrollIntoView({ behavior: 'smooth' })}
               >
                 <span>Explore Destinations</span>
-                <MapPin className="ml-1 group-hover:translate-x-1 transition-transform" size={18} />
+                <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" size={18} />
               </Button>
               <Button 
                 variant="outline" 
-                className="bg-transparent border-white text-white hover:bg-white/10 transition-all duration-300 transform hover:scale-105"
+                className="bg-transparent border border-purple-500/30 backdrop-blur-md text-white hover:bg-white/10 px-8 py-6 rounded-full transition-all duration-300"
                 onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
               >
                 <span>Book Consultation</span>
               </Button>
-            </div>
-          </div>
-          <div 
-            className={`lg:w-1/2 flex justify-center lg:justify-end z-10 transform transition-all duration-1000 ${
-              isVisible ? 'translate-x-0 opacity-100' : 'translate-x-10 opacity-0'
-            }`}
+            </motion.div>
+          </motion.div>
+          
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.8, duration: 0.8 }}
+            className="relative"
+            style={{
+              transform: `translate(${mousePosition.x * -20}px, ${mousePosition.y * -20}px)`,
+              transition: 'transform 0.2s ease-out'
+            }}
           >
-            <div className="relative w-full max-w-lg">
-              {/* Glowing orb effects */}
-              <div className="absolute -top-4 -left-4 w-72 h-72 bg-gw-gold/30 rounded-full filter blur-3xl opacity-70 animate-pulse"></div>
-              <div className="absolute -bottom-10 -right-4 w-72 h-72 bg-gw-blue-light/30 rounded-full filter blur-3xl opacity-70 animate-pulse" style={{ animationDelay: '1s' }}></div>
+            <div className="relative">
+              {/* 3D Rotating Globe */}
+              <motion.div 
+                className="absolute -top-20 -right-20 w-64 h-64 opacity-40"
+                animate={{ 
+                  rotate: 360
+                }}
+                transition={{ 
+                  duration: 30, 
+                  repeat: Infinity, 
+                  ease: "linear" 
+                }}
+              >
+                <Globe className="w-full h-full text-purple-300" />
+              </motion.div>
               
-              <div className="relative overflow-hidden rounded-2xl shadow-2xl">
-                <div className="absolute inset-0 bg-gradient-to-r from-gw-blue-dark/50 to-transparent z-10"></div>
+              {/* Main image with frame */}
+              <div className="relative z-10 rounded-2xl overflow-hidden border border-white/20 shadow-[0_0_80px_rgba(120,60,255,0.15)] backdrop-blur-sm">
+                <div className="absolute inset-0 bg-gradient-to-tr from-purple-900/50 to-transparent z-10"></div>
                 <img 
                   src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80" 
                   alt="Students studying abroad" 
-                  className="w-full aspect-video object-cover transform transition-transform duration-10000 hover:scale-110"
+                  className="w-full object-cover h-[400px]"
                 />
                 
-                {/* Floating UI elements */}
-                <div className="absolute bottom-4 left-4 right-4 bg-black/40 backdrop-blur-md rounded-lg p-3 z-20 transform transition-all duration-500 hover:translate-y-[-5px]">
-                  <div className="flex justify-between items-center">
-                    <div className="text-white">
-                      <div className="text-xs uppercase tracking-wider text-gw-gold">Your Journey Begins</div>
+                {/* Floating cards */}
+                <motion.div 
+                  className="absolute bottom-6 left-6 right-6 bg-white/10 backdrop-blur-xl rounded-xl p-4 border border-white/20 z-20"
+                  initial={{ y: 20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 1.5, duration: 0.6 }}
+                >
+                  <motion.div 
+                    className="flex justify-between items-center"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 1.8, duration: 0.6 }}
+                  >
+                    <div>
+                      <div className="text-xs uppercase tracking-wider text-purple-300">Your Journey Begins</div>
                       <div className="text-sm font-medium">Global Education Pathways</div>
                     </div>
-                    <div className="flex space-x-1">
-                      {[...Array(4)].map((_, i) => (
-                        <div 
-                          key={i} 
-                          className="w-2 h-2 rounded-full bg-gw-gold opacity-70"
-                          style={{ animationDelay: `${i * 0.2}s` }}
-                        ></div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
+                    <motion.div 
+                      className="flex space-x-1"
+                      animate={{ scale: [1, 1.2, 1] }}
+                      transition={{ 
+                        duration: 2,
+                        repeat: Infinity,
+                        repeatType: "loop"
+                      }}
+                    >
+                      <BookOpen className="w-5 h-5 text-purple-300" />
+                    </motion.div>
+                  </motion.div>
+                </motion.div>
               </div>
+              
+              {/* Floating badges */}
+              <motion.div 
+                className="absolute -left-12 top-1/3 bg-white/10 backdrop-blur-xl rounded-full py-2 px-4 border border-white/20 flex items-center space-x-2"
+                initial={{ x: -50, opacity: 0 }}
+                animate={{ 
+                  x: 0, 
+                  opacity: 1,
+                  y: [0, -10, 0]
+                }}
+                transition={{ 
+                  delay: 1.2, 
+                  duration: 0.6,
+                  y: {
+                    duration: 4,
+                    repeat: Infinity,
+                    repeatType: "loop"
+                  }
+                }}
+              >
+                <div className="bg-purple-500 rounded-full p-1">
+                  <Award className="w-4 h-4" />
+                </div>
+                <span className="text-sm font-medium">Top Universities</span>
+              </motion.div>
+              
+              <motion.div 
+                className="absolute -right-8 top-1/4 bg-white/10 backdrop-blur-xl rounded-full py-2 px-4 border border-white/20 flex items-center space-x-2"
+                initial={{ x: 50, opacity: 0 }}
+                animate={{ 
+                  x: 0, 
+                  opacity: 1,
+                  y: [0, -12, 0]
+                }}
+                transition={{ 
+                  delay: 1.4, 
+                  duration: 0.6,
+                  y: {
+                    duration: 5,
+                    repeat: Infinity,
+                    repeatType: "loop",
+                    delay: 0.5
+                  }
+                }}
+              >
+                <div className="bg-blue-500 rounded-full p-1">
+                  <GraduationCap className="w-4 h-4" />
+                </div>
+                <span className="text-sm font-medium">Scholarships</span>
+              </motion.div>
             </div>
-          </div>
+          </motion.div>
         </div>
         
-        {/* Stats Section with animated counting */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 py-8 md:py-12 border-t border-white/20">
-          <StatCounter icon={<GraduationCap className="w-10 h-10 mb-3 text-gw-gold" />} end={1000} suffix="+" label="Students Placed" delay={0} />
-          <StatCounter icon={<MapPin className="w-10 h-10 mb-3 text-gw-gold" />} end={4} label="Countries" delay={300} />
-          <StatCounter icon={<Award className="w-10 h-10 mb-3 text-gw-gold" />} end={200} suffix="+" label="Universities" delay={600} />
-          <StatCounter icon={<Users className="w-10 h-10 mb-3 text-gw-gold" />} end={15} suffix="+" label="Years Experience" delay={900} />
-        </div>
+        {/* Stats Section */}
+        <motion.div 
+          className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-16 md:mt-20 pt-8 border-t border-white/10"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.6, duration: 0.8 }}
+        >
+          <StatCounter 
+            icon={<GraduationCap className="w-10 h-10 mb-3 text-purple-400" />} 
+            end={1000} 
+            suffix="+" 
+            label="Students Placed" 
+            delay={0} 
+          />
+          <StatCounter 
+            icon={<MapPin className="w-10 h-10 mb-3 text-purple-400" />} 
+            end={4} 
+            label="Countries" 
+            delay={200} 
+          />
+          <StatCounter 
+            icon={<Award className="w-10 h-10 mb-3 text-purple-400" />} 
+            end={200} 
+            suffix="+" 
+            label="Universities" 
+            delay={400} 
+          />
+          <StatCounter 
+            icon={<Users className="w-10 h-10 mb-3 text-purple-400" />} 
+            end={15} 
+            suffix="+" 
+            label="Years Experience" 
+            delay={600} 
+          />
+        </motion.div>
       </div>
     </div>
   );
@@ -137,48 +316,75 @@ interface StatCounterProps {
 
 const StatCounter = ({ icon, end, suffix = "", label, delay = 0 }: StatCounterProps) => {
   const [count, setCount] = useState(0);
-  const [isVisible, setIsVisible] = useState(false);
-
+  const countRef = useRef<HTMLSpanElement>(null);
+  
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsVisible(true);
-    }, delay);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          startCounting();
+        }
+      },
+      { threshold: 0.1 }
+    );
     
-    return () => clearTimeout(timer);
-  }, [delay]);
-
-  useEffect(() => {
-    if (!isVisible) return;
+    if (countRef.current) {
+      observer.observe(countRef.current);
+    }
     
-    // Use smaller steps for larger numbers
-    const step = Math.max(1, Math.floor(end / 30));
-    
-    let current = 0;
-    const timer = setInterval(() => {
-      current += step;
-      if (current >= end) {
-        setCount(end);
-        clearInterval(timer);
-      } else {
-        setCount(current);
+    return () => {
+      if (countRef.current) {
+        observer.unobserve(countRef.current);
       }
-    }, 50);
+    };
+  }, []);
+  
+  const startCounting = () => {
+    const duration = 2000; // ms
+    const frameDuration = 1000 / 60; // 60fps
+    const totalFrames = Math.round(duration / frameDuration);
+    const step = Math.max(1, Math.floor(end / 100));
+    
+    let frame = 0;
+    const timer = setInterval(() => {
+      frame++;
+      const progress = frame / totalFrames;
+      const currentCount = Math.min(Math.floor(end * progress), end);
+      
+      setCount(currentCount);
+      
+      if (frame === totalFrames) {
+        clearInterval(timer);
+      }
+    }, frameDuration);
     
     return () => clearInterval(timer);
-  }, [end, isVisible]);
+  };
 
   return (
-    <div 
-      className={`flex flex-col items-center text-center transform transition-all duration-1000 ${
-        isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
-      }`}
+    <motion.div 
+      className="flex flex-col items-center text-center"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: delay / 1000, duration: 0.6 }}
     >
-      {icon}
-      <span className="text-3xl font-bold mb-1 flex items-center">
+      <motion.div
+        initial={{ scale: 0.8 }}
+        animate={{ scale: [1, 1.1, 1] }}
+        transition={{ 
+          duration: 2,
+          repeat: Infinity,
+          repeatType: "loop",
+          delay: delay / 1000
+        }}
+      >
+        {icon}
+      </motion.div>
+      <span ref={countRef} className="text-3xl font-bold mb-1 flex items-center">
         <span>{count}</span><span>{suffix}</span>
       </span>
-      <span className="text-sm text-white/80">{label}</span>
-    </div>
+      <span className="text-sm text-purple-200">{label}</span>
+    </motion.div>
   );
 };
 
