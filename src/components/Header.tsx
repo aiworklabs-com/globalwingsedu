@@ -12,11 +12,13 @@ const Header = () => {
 
   return (
     <header className="w-full bg-white/95 backdrop-blur-sm sticky top-0 z-50 shadow-sm">
-      <div className="container-custom flex justify-between items-center py-4">
+      <div className="container-custom flex justify-between items-center py-2">
         <div className="flex items-center gap-2">
-          <div className="font-bold text-2xl text-gw-blue">
-            <span className="text-gw-gold">Global</span> Wings
-          </div>
+          <img 
+            src="/lovable-uploads/4c095079-4c2b-4c2a-b11f-72373949fdb0.png" 
+            alt="Global Wings Education Logo" 
+            className="h-14"
+          />
         </div>
 
         {/* Desktop Navigation */}

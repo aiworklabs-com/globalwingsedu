@@ -9,8 +9,12 @@ const Footer = () => {
       <div className="container-custom py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           <div>
-            <div className="font-bold text-2xl mb-4">
-              <span className="text-gw-gold">Global</span> Wings
+            <div className="flex items-center gap-2 mb-4">
+              <img 
+                src="/lovable-uploads/4c095079-4c2b-4c2a-b11f-72373949fdb0.png" 
+                alt="Global Wings Education Logo" 
+                className="h-12"
+              />
             </div>
             <p className="text-gray-300 mb-6">
               Your trusted partner for international education consultancy. We help students achieve their dreams of studying abroad.
@@ -55,9 +59,8 @@ const Footer = () => {
           <div>
             <h4 className="font-bold text-lg mb-4">Contact Info</h4>
             <address className="not-italic text-gray-300 space-y-2">
-              <p>123 Education Street, Suite 456</p>
-              <p>Global City, Country</p>
-              <p>Phone: +1 (234) 567-8900</p>
+              <p>Jl. Kopi, Jakarta, Indonesia</p>
+              <p>Phone: +62 812 3456 7890</p>
               <p>Email: info@globalwingsedu.com</p>
             </address>
           </div>

@@ -84,7 +84,7 @@ const ContactSection = () => {
                 </div>
                 <div>
                   <h4 className="font-bold text-gw-blue">Call Us</h4>
-                  <p className="text-gray-600">+1 (234) 567-8900</p>
+                  <p className="text-gray-600">+62 812 3456 7890</p>
                 </div>
               </div>
               
@@ -94,7 +94,7 @@ const ContactSection = () => {
                 </div>
                 <div>
                   <h4 className="font-bold text-gw-blue">Visit Our Office</h4>
-                  <p className="text-gray-600">123 Education Street, Suite 456<br />Global City, Country</p>
+                  <p className="text-gray-600">Jl. Kopi, Jakarta, Indonesia</p>
                 </div>
               </div>
               
