@@ -1,16 +1,26 @@
 
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import { useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { ArrowLeft, ExternalLink, GraduationCap, MapPin, DollarSign, Building2 } from 'lucide-react';
+import { ArrowLeft, ExternalLink, GraduationCap, MapPin, DollarSign, Building2, School } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { countryData } from '@/data/countryData';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 const CountryDestination = () => {
   const { countryId } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
+  
+  // Scroll to top when the component mounts or route changes
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
   
   // Find the country data based on the URL parameter
   const country = countryData.find(c => c.id === countryId);
@@ -108,37 +118,55 @@ const CountryDestination = () => {
             <div className="bg-white p-6 rounded-lg shadow-sm">
               <h2 className="text-2xl font-bold mb-6 text-gw-blue">Top Universities in {country.name}</h2>
               
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>University Name</TableHead>
-                    <TableHead>Location</TableHead>
-                    <TableHead>Programs</TableHead>
-                    <TableHead>World Ranking</TableHead>
-                    <TableHead>Action</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {country.universities.map((uni) => (
-                    <TableRow key={uni.name}>
-                      <TableCell className="font-medium">{uni.name}</TableCell>
-                      <TableCell>{uni.location}</TableCell>
-                      <TableCell>{uni.programs.join(", ")}</TableCell>
-                      <TableCell>{uni.ranking}</TableCell>
-                      <TableCell>
-                        <a 
-                          href={uni.website} 
-                          target="_blank" 
-                          rel="noopener noreferrer" 
-                          className="flex items-center text-gw-blue hover:text-gw-gold"
-                        >
-                          <ExternalLink className="h-4 w-4 mr-1" /> Visit
-                        </a>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {country.universities.map((uni) => (
+                  <Card key={uni.name} className="overflow-hidden hover:shadow-md transition-shadow">
+                    <CardHeader className="bg-gw-blue text-white p-4 flex flex-row items-center space-y-0 gap-4">
+                      <Avatar className="h-14 w-14 bg-white border-2 border-white">
+                        {uni.logo ? (
+                          <AvatarImage src={uni.logo} alt={uni.name} />
+                        ) : (
+                          <AvatarFallback className="bg-white text-gw-blue">
+                            <School className="h-8 w-8" />
+                          </AvatarFallback>
+                        )}
+                      </Avatar>
+                      <div>
+                        <CardTitle className="text-lg">{uni.name}</CardTitle>
+                        <CardDescription className="text-white/80 mt-1">{uni.location}</CardDescription>
+                      </div>
+                    </CardHeader>
+                    <CardContent className="p-4">
+                      <div className="mb-3">
+                        <div className="text-sm font-medium text-gw-blue mb-1">World Ranking</div>
+                        <div className="flex items-center">
+                          <span className="text-2xl font-bold text-gw-gold">{uni.ranking}</span>
+                          <span className="text-gray-500 text-sm ml-1">World Rank</span>
+                        </div>
+                      </div>
+                      
+                      <div className="mb-3">
+                        <div className="text-sm font-medium text-gw-blue mb-1">Programs</div>
+                        <ScrollArea className="h-20 w-full rounded-md border p-2">
+                          <div className="text-sm text-gray-700">
+                            {uni.programs.join(", ")}
+                          </div>
+                        </ScrollArea>
+                      </div>
+                    </CardContent>
+                    <CardFooter className="bg-gray-50 px-4 py-3 border-t">
+                      <a 
+                        href={uni.website} 
+                        target="_blank" 
+                        rel="noopener noreferrer" 
+                        className="flex items-center text-gw-blue hover:text-gw-gold transition-colors"
+                      >
+                        <ExternalLink className="h-4 w-4 mr-2" /> Visit University Website
+                      </a>
+                    </CardFooter>
+                  </Card>
+                ))}
+              </div>
             </div>
           </TabsContent>
           
