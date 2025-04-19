@@ -11,6 +11,7 @@ import { countryData } from '@/data/countryData';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const CountryDestination = () => {
   const { countryId } = useParams();
@@ -116,10 +117,10 @@ const CountryDestination = () => {
           
           <TabsContent value="universities" className="space-y-6">
             <div className="bg-white p-6 rounded-lg shadow-sm">
-              <h2 className="text-2xl font-bold mb-6 text-gw-blue">Top Universities in {country.name}</h2>
+              <h2 className="text-2xl font-bold mb-6 text-gw-blue">Top Universities in {country?.name}</h2>
               
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {country.universities.map((uni) => (
+                {country?.universities.map((uni) => (
                   <Card key={uni.name} className="overflow-hidden hover:shadow-md transition-shadow">
                     <CardHeader className="bg-gw-blue text-white p-4 flex flex-row items-center space-y-0 gap-4">
                       <Avatar className="h-14 w-14 bg-white border-2 border-white">

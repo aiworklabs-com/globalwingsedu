@@ -1,10 +1,10 @@
-
 interface University {
   name: string;
   location: string;
   programs: string[];
   ranking: string;
   website: string;
+  logo?: string; // Add logo as optional property
 }
 
 export interface CountryDataType {
