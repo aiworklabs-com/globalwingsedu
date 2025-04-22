@@ -1,8 +1,8 @@
+
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Calendar, Clock, MapPin } from "lucide-react";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
-import { Link } from "react-router-dom";
 
 interface EventCardProps {
   title: string;
@@ -47,9 +47,9 @@ const EventCard = ({ title, date, time, location, image, registrationLink }: Eve
       
       <CardFooter>
         <Button className="w-full" asChild>
-          <Link to={registrationLink}>
+          <a href={registrationLink} target="_blank" rel="noopener noreferrer">
             Register Now
-          </Link>
+          </a>
         </Button>
       </CardFooter>
     </Card>

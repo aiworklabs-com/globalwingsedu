@@ -1,30 +1,32 @@
+
 import EventCard from "./EventCard";
 
 const EventsSection = () => {
+  // Sample events data - in a real app this would come from an API
   const events = [
     {
       title: "Study in UK: University Fair 2024",
       date: "May 15, 2024",
       time: "10:00 AM - 4:00 PM",
       location: "Grand Ballroom, Hotel Indonesia Kempinski Jakarta",
-      image: "https://images.unsplash.com/photo-1527576539890-dfa815648363?auto=format&fit=crop&w=800&q=80",
-      registrationLink: "/event/study-in-uk-university-fair-2024"
+      image: "/placeholder.svg",
+      registrationLink: "#"
     },
     {
       title: "Australia Education Expo",
       date: "June 1, 2024",
       time: "9:00 AM - 3:00 PM",
       location: "Pacific Place Mall, SCBD Jakarta",
-      image: "https://images.unsplash.com/photo-1486718448742-163732cd1544?auto=format&fit=crop&w=800&q=80",
-      registrationLink: "/event/australia-education-expo"
+      image: "/placeholder.svg",
+      registrationLink: "#"
     },
     {
       title: "Canada University Application Workshop",
       date: "June 15, 2024",
       time: "2:00 PM - 5:00 PM",
       location: "Global Wings Education Center, Jakarta",
-      image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=800&q=80",
-      registrationLink: "/event/canada-university-application-workshop"
+      image: "/placeholder.svg",
+      registrationLink: "#"
     }
   ];
 
