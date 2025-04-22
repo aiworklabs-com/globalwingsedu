@@ -17,6 +17,7 @@ import ServiceCard from '@/components/ServiceCard';
 import TestimonialSection from '@/components/TestimonialSection';
 import ContactSection from '@/components/ContactSection';
 import Footer from '@/components/Footer';
+import EventsSection from '@/components/EventsSection';
 
 const Index = () => {
   const services = [
@@ -91,6 +92,7 @@ const Index = () => {
         </div>
       </section>
       
+      <EventsSection />
       <TestimonialSection />
       <ContactSection />
       <Footer />
